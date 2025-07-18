@@ -1,4 +1,3 @@
 /storage
-docker-compose.override.yml
 /service*.js
 /*.tar
