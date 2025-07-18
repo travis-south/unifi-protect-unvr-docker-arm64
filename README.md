@@ -222,3 +222,21 @@ By using this project you accept all risk associated with it and releasing all p
 
 This project is not associated with UniFi and/or Ubiquiti in any way.  
 We do not distribute any third party software and only use packages that are freely available on the internet.
+
+## For my own use
+
+So I forked this from https://github.com/dciancu/unifi-protect-unvr-docker-arm64 and added my `docker-compose.override.yml` file to customize the setup for my needs.
+
+### Building for my own use
+
+Make sure you are in root before running the build script.
+
+Run `BUILD_TAG_VERSION=1 BUILD_EDGE=1 PROTECT_EDGE=1 bash build.sh`.
+Tag for my local usage. Run `docker tag dciancu/unifi-protect-unvr-docker-arm64:edge registry.gitlab.com/boon-interior/container-registry/unifi-protect-unvr-docker-arm64:edge`.
+Publish to my gitlab registry. Run `DOCKER_USERNAME=github-workflow DOCKER_PASS=<insert password here> DOCKER_IMAGE=registry.gitlab.com/boon-interior/container-registry/unifi-protect-unvr-docker-arm64 DOCKER_REGISTRY_URL=https://registry.gitlab.com ./publish.sh`.
+
+### Running for my own use
+
+Login to my gitlab registry. Run `docker login registry.gitlab.com -u github-workflow`.
+
+Run `docker compose -f docker-compose.yml -f docker-compose.override.yml up -d` and check logs via `docker compose -f docker-compose.yml -f docker-compose.override.yml logs -f`.
