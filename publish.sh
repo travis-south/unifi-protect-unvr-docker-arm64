@@ -3,9 +3,10 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(dirname "$0")"
+REGISTRY_URL="${DOCKER_REGISTRY_URL:-https://registry-1.docker.io/v2/}"
 cd "$SCRIPT_DIR"
 
-echo "$DOCKER_PASS" | docker login -u "$DOCKER_USERNAME" --password-stdin
+echo "$DOCKER_PASS" | docker login "$REGISTRY_URL" -u "$DOCKER_USERNAME" --password-stdin 
 
 image_name="${DOCKER_IMAGE:-dciancu/unifi-protect-unvr-docker-arm64}"
 
