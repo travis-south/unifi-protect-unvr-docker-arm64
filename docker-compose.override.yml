@@ -1,0 +1,44 @@
+services:
+  unifi-protect:
+    image: dciancu/unifi-protect-unvr-docker-arm64:stable
+    tty: true
+    hostname: UNVR
+    extra_hosts:
+      - "UNVR:127.0.1.1"
+    container_name: unifi-protect
+    stop_grace_period: 2m
+    cgroup: host # for Linux, not required on macOS
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup # for Linux, not required on macOS
+      # For Linux bind mounts work
+      - '/mnt/md0/unifi-protect-v5/srv:/srv'
+      - '/mnt/md0/unifi-protect-v5/data:/data'
+      - '/mnt/md0/unifi-protect-v5/persistent:/persistent'
+    environment:
+      - container=docker
+      - STORAGE_DISK=/dev/sda
+      - DEBUG=false
+    restart: unless-stopped
+    cap_add: # for Linux, not required on macOS
+      - dac_read_search
+      - sys_admin
+    security_opt: # for Linux, not required on macOS
+      - apparmor=unconfined
+      - seccomp=unconfined
+    tmpfs:
+      - /run
+      - /run/lock
+      - /tmp
+      - /var/run
+      - /var/run/lock
+    privileged: true # required
+    network_mode: host # does not work on macOS, use ports config below
+    dns:
+      - 192.168.7.197
+      - 192.168.7.196
+    logging:
+      driver: "json-file"
+      options:
+        max-size: 1m
+        max-file: "2"
+        compress: "true"
