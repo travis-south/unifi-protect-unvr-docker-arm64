@@ -22,9 +22,6 @@ services:
     cap_add: # for Linux, not required on macOS
       - dac_read_search
       - sys_admin
-    security_opt: # for Linux, not required on macOS
-      - apparmor=unconfined
-      - seccomp=unconfined
     tmpfs:
       - /run
       - /run/lock
