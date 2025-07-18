@@ -16,7 +16,7 @@ services:
       - '/mnt/md0/unifi-protect-v5/persistent:/persistent'
     environment:
       - container=docker
-      - STORAGE_DISK=/dev/sda
+      - STORAGE_DISK=/dev/md0
       - DEBUG=false
     restart: unless-stopped
     cap_add: # for Linux, not required on macOS
