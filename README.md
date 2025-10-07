@@ -226,6 +226,8 @@ So I forked this from https://github.com/dciancu/unifi-protect-unvr-docker-arm64
 
 ### Building for my own use
 
+Make sure you are in root before running the build script.
+
 Run `BUILD_TAG_VERSION=1 BUILD_STABLE=1 PROTECT_STABLE=1 BUILD_PRUNE=1 DOCKER_NO_CACHE=1 bash build.sh`.
 
 ### Running for my own use
