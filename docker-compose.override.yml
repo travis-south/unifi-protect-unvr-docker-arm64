@@ -8,6 +8,7 @@ services:
     container_name: unifi-protect
     stop_grace_period: 2m
     cgroup: host # for Linux, not required on macOS
+    pull_policy: always
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup # for Linux, not required on macOS
       # For Linux bind mounts work
