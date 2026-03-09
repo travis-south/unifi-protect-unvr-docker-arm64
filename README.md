@@ -231,7 +231,7 @@ So I forked this from https://github.com/dciancu/unifi-protect-unvr-docker-arm64
 
 Make sure you are in root before running the build script.
 
-Run `BUILD_TAG_VERSION=1 BUILD_EDGE=1 PROTECT_EDGE=1 bash build.sh`.
+Run `BUILD_TAG_VERSION=1 BUILD_EDGE=1 PROTECT_EDGE=1 BUILD_PRUNE=1 DOCKER_NO_CACHE=1 bash build.sh`.
 Tag for my local usage. Run `docker tag dciancu/unifi-protect-unvr-docker-arm64:edge registry.gitlab.com/boon-interior/container-registry/unifi-protect-unvr-docker-arm64:edge`.
 Publish to my gitlab registry. Run `DOCKER_USERNAME=github-workflow DOCKER_PASS=<insert password here> DOCKER_IMAGE=registry.gitlab.com/boon-interior/container-registry/unifi-protect-unvr-docker-arm64 DOCKER_REGISTRY_URL=https://registry.gitlab.com ./publish.sh`.
 
