@@ -180,7 +180,10 @@ RUN --mount=target=/var/lib/apt/lists,type=cache --mount=target=/var/cache/apt,t
         && apt-get -y --no-install-recommends -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' \
             install /opt/debs/*.deb /opt/*.deb /opt/unifi-protect-deb/*.deb \
         && rm /opt/*.deb; \
-    fi
+    fi \
+    # PostgreSQL uses the system timezone database. Restore it after firmware package installation. \
+    && apt-get --no-install-recommends --reinstall -y install tzdata \
+    && test -r /usr/share/zoneinfo/Etc/UTC
 
 RUN \
     # Mock StorageAPIClient of grpc ustate. \
