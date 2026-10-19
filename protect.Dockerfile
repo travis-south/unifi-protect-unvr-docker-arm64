@@ -92,6 +92,10 @@ ARG MSF_URL
 ARG DS_URL
 # UniFi Protect evidence verification CLI
 ARG PROTECT_VERIFY_URL
+# UniFi User Assets Service
+ARG USER_ASSETS_URL
+# Shared face recognition library
+ARG FACE_SHARED_LIB_URL
 ARG AIFC_CNS_STABLE_URL="https://fw-download.ubnt.com/data/ai-feature-console/cba6-uos-deb11-arm64-1.10.5-de8752ff-02a0-4b28-9ddf-9158deb0a276.deb"
 ARG AIFC_CTR_STABLE_URL="https://fw-download.ubnt.com/data/ai-feature-controller/7af8-uos-deb11-arm64-2.0.17-5137b74f-65d2-4725-b3ef-ce2a10625e3a.deb"
 ARG DS_STABLE_URL="https://fw-download.ubnt.com/data/ds/6c38-uos-deb11-arm64-2.0.13-afa1d10f-0caa-49f1-b48c-a9b3695d59d1.deb"
@@ -156,6 +160,14 @@ RUN --mount=target=/var/lib/apt/lists,type=cache --mount=target=/var/cache/apt,t
             PROTECT_VERIFY_URL="$(wget -q -O - "$(printf "$DEB_UPDATE_URL" | sed 's/{product}/protect-verify/')" | jq -r '._embedded.firmware[0]._links.data.href')" \
             && echo "PROTECT_VERIFY_URL=${PROTECT_VERIFY_URL}"; \
         fi \
+        && if [ -z "${USER_ASSETS_URL:-}" ]; then \
+            USER_ASSETS_URL="$(wget -q -O - "$(printf "$DEB_UPDATE_URL" | sed 's/{product}/unifi-user-assets/')" | jq -r '._embedded.firmware[0]._links.data.href')" \
+            && echo "USER_ASSETS_URL=${USER_ASSETS_URL}"; \
+        fi \
+        && if [ -z "${FACE_SHARED_LIB_URL:-}" ]; then \
+            FACE_SHARED_LIB_URL="$(wget -q -O - "$(printf "$DEB_UPDATE_URL" | sed 's/{product}/unifi-face-shared-lib/')" | jq -r '._embedded.firmware[0]._links.data.href')" \
+            && echo "FACE_SHARED_LIB_URL=${FACE_SHARED_LIB_URL}"; \
+        fi \
         && wget --no-verbose --show-progress --progress=dot:giga -O /opt/unifi-protect.deb "$PROTECT_URL" \
         && wget --no-verbose --show-progress --progress=dot:giga -O /opt/ai-feature-console.deb "$AIFC_CNS_URL" \
         && wget --no-verbose --show-progress --progress=dot:giga -O /opt/ai-feature-controller.deb "$AIFC_CTR_URL" \
@@ -166,6 +178,8 @@ RUN --mount=target=/var/lib/apt/lists,type=cache --mount=target=/var/cache/apt,t
         && wget --no-verbose --show-progress --progress=dot:giga -O /opt/msf.deb "$MSF_URL" \
         && wget --no-verbose --show-progress --progress=dot:giga -O /opt/ds.deb "$DS_URL" \
         && wget --no-verbose --show-progress --progress=dot:giga -O /opt/protect-verify.deb "$PROTECT_VERIFY_URL" \
+        && wget --no-verbose --show-progress --progress=dot:giga -O /opt/unifi-user-assets.deb "$USER_ASSETS_URL" \
+        && wget --no-verbose --show-progress --progress=dot:giga -O /opt/unifi-face-shared-lib.deb "$FACE_SHARED_LIB_URL" \
         && apt-get -y --no-install-recommends -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' \
             install /opt/debs/*.deb /opt/*.deb \
         && rm /opt/*.deb; \
@@ -214,6 +228,8 @@ LABEL AIFC_CTR_STABLE_URL=${AIFC_CTR_STABLE_URL}
 LABEL DS_STABLE_URL=${DS_STABLE_URL}
 LABEL PROTECT_URL=${PROTECT_URL}
 LABEL PROTECT_VERIFY_URL=${PROTECT_VERIFY_URL}
+LABEL USER_ASSETS_URL=${USER_ASSETS_URL}
+LABEL FACE_SHARED_LIB_URL=${FACE_SHARED_LIB_URL}
 LABEL AIFC_CNS_URL=${AIFC_CNS_URL}
 LABEL AIFC_CTR_URL=${AIFC_CTR_URL}
 LABEL MS_URL=${MS_URL}
